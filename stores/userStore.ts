@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { instance } from '../utils/authorization'
 import apiUrl from '../config/config'
-import { setCookie, removeCookie } from '../utils/cookies'
+import { setCookie, removeCookie, getCookie } from '../utils/cookies'
+import { setAuthorizationHeader } from '../utils/authorization'
 
 export const userStore = defineStore('user', {
     state: () => ({
@@ -16,16 +17,16 @@ export const userStore = defineStore('user', {
 
             try {
                 const response = await instance.post(`${this.url}/login`, data, { withCredentials: true });
-          
+
                 setCookie(response.data.user.token)
 
                 if (response.data.success) {
                     this.getAllUserData();
                 }
 
-                return response.data.message;
+                return response.data;
             } catch (error) {
-                return `Error: ${error.message}`
+                return error.response.data
             }
         },
         async logOut() {
@@ -49,7 +50,17 @@ export const userStore = defineStore('user', {
                 return `Error: ${error.message}`
             }
         },
+        reloadSession() {
+            if (this.isLogged) {
+                setAuthorizationHeader(getCookie())
+                return true;
+            }
+            return false;
+        },
     },
     getters: {
+        isLogged() {
+            return getCookie() !== "";
+        }
     }
 })

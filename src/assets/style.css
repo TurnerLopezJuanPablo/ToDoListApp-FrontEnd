@@ -1,1 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Alatsi&display=swap');
+
+.french-gray {
+    color: #c8ccd0;
+}
+
+.french-gray-bg {
+    background-color: #c8ccd0;
+}
+
+.cadet-gray {
+    color: #8b939c;
+}
+
+.cadet-gray-bg {
+    background-color: #8b939c;
+}
+
+.english-violet {
+    color: #59546c;
+}
+
+.english-violet-bg {
+    background-color: #59546c;
+}
+
+.delft-blue {
+    color: #38405f;
+}
+
+.delft-blue-bg {
+    background-color: #38405f;
+}
+
+.rich-black {
+    color: #0e121f;
+}
+
+.rich-black-bg {
+    background-color: #0e121f;
+}
+
+.card {
+    box-shadow: 3px 6px 10px 0px rgba(0,0,0,0.3);
+}
+
+.title {
+    font-size: 50px;
+}
+
+.text-normal {
+    font-size: 17px
+}

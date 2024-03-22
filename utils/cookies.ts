@@ -1,6 +1,6 @@
 import { setAuthorizationHeader, clearAuthorizationHeader } from "./authorization";
 
-export const cookieName =" tokenToDoListApp"
+export const cookieName = " tokenToDoListApp"
 
 export function setCookie(value: any, name = cookieName, expirationDays = 7) {
     const expirationDate = new Date();
@@ -13,9 +13,11 @@ export function setCookie(value: any, name = cookieName, expirationDays = 7) {
 
 export function getCookie(name = cookieName) {
     const cookies = document.cookie.split("; ");
+
     for (let i = 0; i < cookies.length; i++) {
         const [cookieName, cookieValue] = cookies[i].split("=");
-        if (cookieName === name) {
+
+        if (cookieName.trim() === name.trim()) {
             return cookieValue;
         }
     }
@@ -25,5 +27,5 @@ export function getCookie(name = cookieName) {
 export function removeCookie(name = cookieName) {
     setCookie(null, name, -1000);
     clearAuthorizationHeader();
-    // location.reload();
-  }
+    location.reload();
+}
