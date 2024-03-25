@@ -3,11 +3,14 @@ import { instance } from '../utils/authorization'
 import apiUrl from '../config/config'
 import { setCookie, removeCookie, getCookie } from '../utils/cookies'
 import { setAuthorizationHeader } from '../utils/authorization'
+import { useRouter } from 'vue-router'
 
 export const userStore = defineStore('user', {
     state: () => ({
         url: `${apiUrl}user`,
         currentUserData: null,
+        router: useRouter(),
+        session: false
     }),
     actions: {
         async logIn(email: String, password: String) {
@@ -34,6 +37,8 @@ export const userStore = defineStore('user', {
                 const response = await instance.post(`${this.url}/logout`, { withCredentials: true });
                 alert(response.data.message);
 
+                this.currentUserData = null;
+
                 if (response.data.success) {
                     removeCookie();
                 }
@@ -44,23 +49,31 @@ export const userStore = defineStore('user', {
         async getAllUserData() {
             try {
                 const response = await instance.get(`${this.url}/getAllData`, { withCredentials: true });
+                this.currentUserData = response.data.result;
 
                 return response.data.message;
             } catch (error) {
                 return `Error: ${error.message}`
             }
         },
-        reloadSession() {
-            if (this.isLogged) {
-                setAuthorizationHeader(getCookie())
+        async reloadSession() {
+            const cookieSession = getCookie();
+
+            if (cookieSession === '') {
+                this.router.push({ name: 'login' });
+
+                return false;
+            } else {
+                setAuthorizationHeader(cookieSession);
+                await this.getAllUserData();
+
                 return true;
             }
-            return false;
         },
     },
     getters: {
-        isLogged() {
-            return getCookie() !== "";
+        isLogged() {           
+            return getCookie() !== '' && this.session;
         }
     }
 })

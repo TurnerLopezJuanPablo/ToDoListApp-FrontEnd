@@ -4,7 +4,7 @@
             <div class="col-lg-6 mx-auto">
                 <div class="card">
                     <div class="card-body">
-                        <form @submit="submitForm">
+                        <form @submit.prevent="submitForm">
                             <h2 class="text-center my-4">Welcome!</h2>
 
                             <hr>
@@ -60,7 +60,7 @@
                                     Loading...
                                 </button>
                             </div>
-                            <div class="text-end mx-3"><code>* Required fields</code></div>
+                            <div class="text-end mx-3 mt-3"><code>* Required fields</code></div>
                         </form>
                     </div>
                 </div>
@@ -93,9 +93,11 @@ export default {
             loading: false,
         }
     },
-    mounted() {
-        if (this.userStore.isLogged) {
-            this.router.push({ name: 'home' });
+    watch: {
+        'userStore.isLogged': function (newValue) {
+            if (newValue) {
+                this.$router.push({ name: 'home' });
+            }
         }
     },
     methods: {
@@ -123,7 +125,7 @@ export default {
 
                 if (response.success) {
                     alert(response.message);
-                    location.reload();
+                    this.router.push({ name: 'home' });
                 } else {
                     this.errorMsg = response.message;
                 }

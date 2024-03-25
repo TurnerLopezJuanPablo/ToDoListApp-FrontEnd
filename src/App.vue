@@ -6,9 +6,29 @@
       <RouterView></RouterView>
     </main>
     <aside class="sidebar2"></aside>
-    <footer class="footer"></footer>
+    <Footer class="footer"></Footer>
   </div>
 </template>
+
+<script setup>
+import { userStore } from '../stores/userStore';
+import { onMounted } from 'vue';
+
+import Footer from '@/components/views/Footer.vue'
+
+const store = userStore();
+
+onMounted(async () => {
+  try {
+    const result = await store.reloadSession();
+    console.log('Session reloaded: ', result);
+    store.session = true;
+  } catch (error) {
+    console.error('Error reloading session: ', error);
+    store.session = false;
+  }
+});
+</script>
 
 <style scoped>
 .layout {
@@ -18,7 +38,7 @@
   grid-template-columns: 1fr;
   grid-template-areas: 'header' 'sidebar' 'main' 'footer';
   */
-  
+
   height: 100vh;
 
   font-family: "Alatsi", sans-serif;
