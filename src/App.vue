@@ -1,91 +1,77 @@
 <template>
-  <div class="layout">
-    <header></header>
-    <aside></aside>
-    <main>
-      <RouterView></RouterView>
-    </main>
-    <aside class="sidebar2"></aside>
-    <Footer class="footer"></Footer>
-  </div>
+  <main class="container-fluid vh-100 main">
+    <div class="row h-100">
+      <div id="asideDiv" :class="{ 'd-none': !store.session }"
+        class="col-md-4 col-lg-3 col-xxl-2 d-flex flex-column aside scrollbox">
+        <Aside />
+      </div>
+      <div id="routerViewDiv"
+        :class="{ 'col-md-12 d-flex flex-column': !store.session, 'col-md-8 col-lg-9 col-xxl-10 d-flex flex-column scrollbox': store.session }">
+        <RouterView />
+      </div>
+    </div>
+  </main>
 </template>
 
 <script setup>
-import { userStore } from '../stores/userStore';
-import { onMounted } from 'vue';
+import { userStore } from "../stores/userStore";
+import { onMounted, watch, ref } from "vue";
 
-import Footer from '@/components/views/Footer.vue'
+import Aside from "@/components/views/Aside.vue";
 
 const store = userStore();
+const asideDiv = ref(null);
+const routerViewDiv = ref(null);
 
 onMounted(async () => {
   try {
     const result = await store.reloadSession();
-    console.log('Session reloaded: ', result);
-    store.session = true;
+    store.session = result;
   } catch (error) {
-    console.error('Error reloading session: ', error);
+    console.error("Error reloading session: ", error);
     store.session = false;
   }
 });
+
+watch(() => store.session, (newValue) => {
+  asideDiv.value = document.getElementById('asideDiv');
+  routerViewDiv.value = document.getElementById('routerViewDiv');
+
+  if (asideDiv.value && routerViewDiv.value) {
+    if (!store.session) {
+      asideDiv.value.classList.add('d-none');
+      routerViewDiv.value.classList.remove('col-md-10', 'bg-dark');
+      routerViewDiv.value.classList.add('col-md-12', 'bg-dark');
+    } else {
+      asideDiv.value.classList.remove('d-none');
+      routerViewDiv.value.classList.remove('col-md-12', 'bg-dark');
+      routerViewDiv.value.classList.add('col-md-10', 'bg-dark');
+    }
+  }
+},
+  { immediate: true }
+);
+
 </script>
 
 <style scoped>
-.layout {
-
-  /* display: grid;
-  grid-template-rows: 80px auto 0 80px;
-  grid-template-columns: 1fr;
-  grid-template-areas: 'header' 'sidebar' 'main' 'footer';
-  */
-
-  height: 100vh;
-
+.main {
   font-family: "Alatsi", sans-serif;
   font-style: normal;
+  background-color: #1a1a1a;
 }
 
-@media (min-width: 768px) {
-  .layout {
-    display: grid;
-    grid-template-rows: 80px auto 80px;
-    grid-template-columns: 180px auto 180px;
-    grid-template-areas:
-      'header header header'
-      'sidebar main sidebar2'
-      'footer footer footer';
-  }
+.aside {
+  color: #ffffff;
+  background-color: #1d1d1d;
 }
 
-@media (max-width: 768px) {
-  .sidebar2 {
-    display: none;
-  }
+.scrollbox {
+  height: 100%;
+  overflow: auto;
 }
 
-header {
-  grid-area: header;
-  background: #59546c;
-}
-
-.footer {
-  grid-area: footer;
-  background: #0e121f;
-  color: #f3f9d2;
-  margin: 0;
-}
-
-aside {
-  grid-area: sidebar;
-  /* background: #f6c356; */
-}
-
-.sidebar2 {
-  grid-area: sidebar2;
-  /* background: #f6c356; */
-}
-
-main {
-  grid-area: main;
+::-webkit-scrollbar {
+  width: 0px;
 }
 </style>

@@ -1,76 +1,70 @@
 <template>
-    <div class="container-fluid my-5">
-        <div class="row">
-            <div class="col-lg-6 mx-auto">
-                <div class="card">
-                    <div class="card-body">
-                        <form @submit.prevent="submitForm">
-                            <h2 class="text-center my-4">Welcome!</h2>
+    <div class="container-fluid mt-5">
+        <div class="d-flex justify-content-around">
+            
+            <div class="w-50 me-2" style="max-width: 500px;">
+                <form @submit.prevent="submitForm">
+                    <h1 class="text-center my-4">Welcome!</h1>
+                    <p class="text-center">Please enter your Email and Password</p>
 
-                            <hr>
-                            <p class="text-center">Please enter your Email and Password</p>
-                            <hr>
-
-                            <div class="alert alert-danger mx-3 mb-4" v-if="this.errorMsg !== ''">
-                                <strong>Error!</strong> {{ errorMsg }}
-                            </div>
-
-                            <div
-                                :class="{ 'form-floating': true, 'mb-2': this.errorEmailMsg !== '', 'mb-4': this.errorEmailMsg === '', 'mx-3': true, 'mt-4': true }">
-                                <input type="email" class="form-control" id="email" placeholder="email" name="email"
-                                    v-model="this.userEmail">
-                                <label for="email">Email <code>*</code></label>
-                            </div>
-
-                            <div class="alert alert-danger mx-3 mb-4" v-if="this.errorEmailMsg !== ''">
-                                <strong>Error!</strong> {{ errorEmailMsg }}
-                            </div>
-
-                            <div
-                                :class="{ 'row': true, 'mb-2': this.errorPasswordMsg !== '', 'mb-4': this.errorPasswordMsg === '', 'mx-1': true, 'mt-4': true }">
-                                <div class="col-10">
-                                    <div class="input-group">
-                                        <div class="form-floating">
-                                            <input :type="this.showPassword ? 'text' : 'password'" class="form-control"
-                                                id="password" placeholder="password" name="password"
-                                                v-model="this.userPassword">
-                                            <label for="password">Password <code>*</code></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2 d-flex justify-content-center">
-                                    <button class="btn" @click.prevent="toggleShowPassword()">
-                                        <img v-if="this.showPassword" src="../assets/icons/icons8-eye-32.png"
-                                            alt="eyePng">
-                                        <img v-else src="../assets/icons/icons8-closed-eye-32.png" alt="eyePng">
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="alert alert-danger mx-3 mb-4" v-if="this.errorPasswordMsg !== ''">
-                                <strong>Error!</strong> {{ errorPasswordMsg }}
-                            </div>
-
-                            <div class="d-flex justify-content-center px-5 mb-2 mt-4">
-                                <button v-if="!this.loading" type="submit"
-                                    class="btn btn-primary px-5 py-2 text-normal">LogIn
-                                </button>
-                                <button v-else class="btn btn-primary px-4 py-2 text-normal" disabled>
-                                    <span class="spinner-border spinner-border-sm"> </span>
-                                    Loading...
-                                </button>
-                            </div>
-                            <div class="text-end mx-3 mt-3"><code>* Required fields</code></div>
-                        </form>
+                    <div class="alert alert-danger mx-3 mb-4" v-if="this.errorMsg !== ''">
+                        <strong>Error!</strong> {{ errorMsg }}
                     </div>
-                </div>
-                <p class="text-center mt-5">Forgot your password? <a class="link-opacity-75-hover" href="#">Click
+
+                    <div
+                        :class="{ 'form-floating': true, 'mb-2': this.errorEmailMsg !== '', 'mb-4': this.errorEmailMsg === '', 'mx-3': true, 'mt-4': true }">
+                        <input type="email" class="form-control" id="email" placeholder="email" name="email"
+                            v-model="this.userEmail">
+                        <label for="email">Email</label>
+                    </div>
+
+                    <div class="alert alert-danger mx-3 mb-4" v-if="this.errorEmailMsg !== ''">
+                        <strong>Error!</strong> {{ errorEmailMsg }}
+                    </div>
+
+                    <div
+                        :class="{ 'row': true, 'mb-2': this.errorPasswordMsg !== '', 'mb-4': this.errorPasswordMsg === '', 'mx-1': true, 'mt-4': true }">
+                        <div class="col-10">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input :type="this.showPassword ? 'text' : 'password'" class="form-control"
+                                        id="password" placeholder="password" name="password"
+                                        v-model="this.userPassword">
+                                    <label for="password">Password</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-center">
+                            <button class="btn" @click.prevent="toggleShowPassword()">
+                                <img v-if="this.showPassword" src="../assets/icons/icons8-eye-32.png" alt="eyePng">
+                                <img v-else src="../assets/icons/icons8-closed-eye-32.png" alt="eyePng">
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger mx-3 mb-4" v-if="this.errorPasswordMsg !== ''">
+                        <strong>Error!</strong> {{ errorPasswordMsg }}
+                    </div>
+
+                    <div class="d-flex justify-content-center px-5 mb-2 mt-4">
+                        <button v-if="!this.loading" type="submit"
+                            class="btn light-blue-bg white px-5 py-2 text-normal">LogIn
+                        </button>
+                        <button v-else class="btn btn-primary px-4 py-2 text-normal" disabled>
+                            <span class="spinner-border spinner-border-sm"> </span>
+                            Loading...
+                        </button>
+                    </div>
+                </form>
+                <p class="text-center mt-3">Forgot your password? <a class="link-opacity-75-hover" href="#">Click
                         here</a></p>
-                <div class="d-flex justify-content-evenly align-items-center px-5">
-                    <p class="my-3">Don't have an account?</p>
-                    <button type="submit" class="btn btn-secondary px-5 py-2 text-normal">SignUp</button>
+                <div class="d-flex justify-content-around align-items-center">
+                    <p class="my-3 me-3">Don't have an account?</p>
+                    <button type="submit" class="btn blue-bg white px-5 py-2 text-normal">SignUp</button>
                 </div>
             </div>
+
+            <img src="../assets/img-logIn.png" alt="image-logIn" class="mr-3 d-none d-md-inline w-50 me-0" style="max-width: 500px;">
         </div>
     </div>
 </template>
@@ -125,6 +119,7 @@ export default {
 
                 if (response.success) {
                     alert(response.message);
+                    this.userStore.session = true;
                     this.router.push({ name: 'home' });
                 } else {
                     this.errorMsg = response.message;

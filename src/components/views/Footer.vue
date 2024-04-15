@@ -1,5 +1,5 @@
 <template>
-    <h5 class="text-center py-5">{{ mainAppText }}</h5>
+    <h5 class="pt-5 ps-5">{{ mainAppText }}</h5>
 </template>
 
 <script>

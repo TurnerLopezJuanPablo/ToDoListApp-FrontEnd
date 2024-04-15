@@ -1,13 +1,19 @@
 <template>
-    <h1 class="text-center mt-3 mb-5">Welcome to TaskMaster!</h1>
-    <div class="d-flex justify-content-center align-items-center">
-        <button v-if="!this.loading" type="submit" class="btn btn-danger px-5 py-2 text-normal" @click="this.logOut()">
-            LogOut
-        </button>
-        <button v-else class="btn btn-danger px-4 py-2 text-normal" disabled>
-            <span class="spinner-border spinner-border-sm"> </span>
-            Loading...
-        </button>
+    <div class="container my-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div v-for="a in as" class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-3" style="height: 40vh;">
+                    <div class="card bg-dark h-100">
+                        <div class="card-header text-center">TaskTitle</div>
+                        <div class="card-body">
+                            <p>Description</p>
+                        </div>
+                        <div class="card-footer">Priority, Category</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -20,7 +26,7 @@ export default {
         return {
             userStore: userStore(),
             router: useRouter(),
-            loading: false
+            as: 10
         }
     },
     watch: {
@@ -29,14 +35,23 @@ export default {
                 this.$router.push({ name: 'home' });
             }
         }
-    },
-    methods: {
-        logOut() {
-            this.loading = true;
-            this.userStore.logOut().then(() => {
-                this.loading = false;
-            })
-        }
-    },
+    }
 }
 </script>
+
+<style scoped>
+h1 {
+    color: #fff;
+}
+
+.card-header,
+.card-footer {
+    background-color: #474747;
+    color: #fff;
+}
+
+.card-body {
+    background-color: #585858;
+    color: #fff;
+}
+</style>

@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router'
 export const userStore = defineStore('user', {
     state: () => ({
         url: `${apiUrl}user`,
+        currentUser: null,
         currentUserData: null,
         router: useRouter(),
         session: false
@@ -49,13 +50,16 @@ export const userStore = defineStore('user', {
         async getAllUserData() {
             try {
                 const response = await instance.get(`${this.url}/getAllData`, { withCredentials: true });
-                this.currentUserData = response.data.result;
-
+                const { Contributes, ...userData } = response.data.result;
+        
+                this.currentUserData = Contributes;
+                this.currentUser = userData;
+        
                 return response.data.message;
             } catch (error) {
-                return `Error: ${error.message}`
+                return `Error: ${error.message}`;
             }
-        },
+        },        
         async reloadSession() {
             const cookieSession = getCookie();
 
