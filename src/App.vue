@@ -1,5 +1,6 @@
 <template>
-  <main class="container-fluid vh-100 main">
+  <main
+    :class="{ 'container-fluid vh-100 main bg-dark': store.session, 'container-fluid vh-100 main bg-white': !store.session }">
     <div class="row h-100">
       <div id="asideDiv" :class="{ 'd-none': !store.session }"
         class="col-md-4 col-lg-3 col-xxl-2 d-flex flex-column aside scrollbox">
@@ -26,6 +27,7 @@ const routerViewDiv = ref(null);
 onMounted(async () => {
   try {
     const result = await store.reloadSession();
+    console.log('Session reloaded: ', result);
     store.session = result;
   } catch (error) {
     console.error("Error reloading session: ", error);
@@ -58,7 +60,7 @@ watch(() => store.session, (newValue) => {
 .main {
   font-family: "Alatsi", sans-serif;
   font-style: normal;
-  background-color: #1a1a1a;
+
 }
 
 .aside {
@@ -72,6 +74,17 @@ watch(() => store.session, (newValue) => {
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #414141;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  cursor: n-resize
 }
 </style>

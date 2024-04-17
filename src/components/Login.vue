@@ -90,7 +90,7 @@ export default {
     watch: {
         'userStore.isLogged': function (newValue) {
             if (newValue) {
-                this.$router.push({ name: 'home' });
+                this.$router.push({ name: 'tasksForToday' });
             }
         }
     },
@@ -120,7 +120,7 @@ export default {
                 if (response.success) {
                     alert(response.message);
                     this.userStore.session = true;
-                    this.router.push({ name: 'home' });
+                    this.router.push({ name: 'tasksForToday' });
                 } else {
                     this.errorMsg = response.message;
                 }

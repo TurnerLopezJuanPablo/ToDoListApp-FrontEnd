@@ -1,19 +1,15 @@
 <template>
-    <div class="container my-5">
-        <div class="container-fluid">
+    <div class="container my-3">
             <div class="row">
                 <div v-for="a in as" class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-3" style="height: 40vh;">
-                    <div class="card bg-dark h-100">
+                    <div class="card h-100">
                         <div class="card-header text-center">TaskTitle</div>
                         <div class="card-body">
                             <p>Description</p>
                         </div>
-                        <div class="card-footer">Priority, Category</div>
                     </div>
                 </div>
-            </div>
         </div>
-
     </div>
 </template>
 
@@ -32,7 +28,7 @@ export default {
     watch: {
         '!userStore.isLogged': function (newValue) {
             if (newValue) {
-                this.$router.push({ name: 'home' });
+                this.$router.push({ name: 'login' });
             }
         }
     }
@@ -44,8 +40,11 @@ h1 {
     color: #fff;
 }
 
-.card-header,
-.card-footer {
+.card {
+    background-color: #474747;
+}
+
+.card-header {
     background-color: #474747;
     color: #fff;
 }

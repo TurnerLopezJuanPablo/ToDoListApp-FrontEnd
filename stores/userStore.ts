@@ -22,7 +22,7 @@ export const userStore = defineStore('user', {
             try {
                 const response = await instance.post(`${this.url}/login`, data, { withCredentials: true });
 
-                setCookie(response.data.user.token)
+                setCookie(response.data.user.token);
 
                 if (response.data.success) {
                     this.getAllUserData();
@@ -33,6 +33,7 @@ export const userStore = defineStore('user', {
                 return error.response.data
             }
         },
+
         async logOut() {
             try {
                 const response = await instance.post(`${this.url}/logout`, { withCredentials: true });
@@ -47,36 +48,52 @@ export const userStore = defineStore('user', {
                 console.log(error)
             }
         },
+
         async getAllUserData() {
-            try {
+            try {              
                 const response = await instance.get(`${this.url}/getAllData`, { withCredentials: true });
                 const { Contributes, ...userData } = response.data.result;
-        
+
                 this.currentUserData = Contributes;
                 this.currentUser = userData;
-        
+               
                 return response.data.message;
             } catch (error) {
-                return `Error: ${error.message}`;
-            }
-        },        
-        async reloadSession() {
-            const cookieSession = getCookie();
-
-            if (cookieSession === '') {
                 this.router.push({ name: 'login' });
+                this.session = false;
 
-                return false;
-            } else {
-                setAuthorizationHeader(cookieSession);
-                await this.getAllUserData();
-
-                return true;
+                throw new Error(error.message);
             }
         },
+
+        async reloadSession() {
+            const cookieSession = getCookie();
+            
+            if (cookieSession === '') {
+                this.router.push({ name: 'login' });
+                return false;
+            }
+
+            try {
+                setAuthorizationHeader(cookieSession);
+                await this.getAllUserData();
+                
+                this.router.push({ name: 'tasksForToday' });
+                this.session = true;
+
+                return true;
+            } catch (error) {
+                console.error(`Error reloading session: ${error.message}`);
+                
+                this.router.push({ name: 'login' });
+                this.session = false;
+
+                return false;
+            }
+        }
     },
     getters: {
-        isLogged() {           
+        isLogged() {
             return getCookie() !== '' && this.session;
         }
     }
